@@ -5,7 +5,7 @@ if (process.env.MONGODB_URL)
 {
     url = process.env.MONGODB_URL;
 } else {
-    url = "mongodb://host.docker.internal:27017/whiskers-db?retryWrites=true&w=majority";
+    url = "mongodb://mongo:27017/users";
 }
 
 mongoose.Promise = global.Promise;
@@ -20,6 +20,7 @@ mongoose.connect(
         if(err)
         {
             console.log("Connection with database failed");
+            console.log(err);
             return; // Exit
         }
         

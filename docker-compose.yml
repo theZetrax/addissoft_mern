@@ -1,0 +1,22 @@
+version: '3'
+services: 
+  client:
+    container_name: client
+    restart: on-failure
+    build: ./client
+    ports:
+      - "8080:8080"
+  app:
+    container_name: app
+    restart: always
+    build: ./server
+    ports:
+      - "8081:8081"
+    # links:
+    #   - mongo
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports: 
+      - "27019:27017"
