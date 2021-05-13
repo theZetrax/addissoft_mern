@@ -1,9 +1,8 @@
 FROM node:lts-alpine
 
 WORKDIR /client
-# FIXME: Copy everything, for now remove later.
+# TODO: Copy any relevant file.
 COPY ["package.json" , "package-lock.json", "./"]
-
 
 RUN npm install --production
 COPY . .
