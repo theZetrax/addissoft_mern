@@ -18,7 +18,7 @@ const opts: mongoose.ConnectOptions = {
     serverSelectionTimeoutMS: 5000, // Retry send operations for 5 seconds
     socketTimeoutMS: 45000 // Close socket after 45 Seconds
 };
-const url: string = "mongodb://mongo:27017/users";
+const url: any = process.env.MONGODB_HOST;
 
 class MongoConnection {
     private static _instance: MongoConnection;

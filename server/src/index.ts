@@ -1,3 +1,5 @@
+console.log(process.env.DB_HOST);
+
 import { createServer } from './utils/server';
 import dbconnection from './utils/db';
 

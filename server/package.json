@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node build/app.js",
-    "test:unit": "ENV_FILE=./config/.env.test jest"
+    "start": "node -r dotenv/config build/index.js dotenv_config_path=./config/.env.default",
+    "test:unit": "jest"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/theZetrax/addissoft_menr#readme",
   "dependencies": {
+    "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "mongoose": "^5.12.8"
   },

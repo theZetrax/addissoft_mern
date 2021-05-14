@@ -17,21 +17,21 @@ beforeAll(async () => {
 
 describe('test', () => {
     it('should be true', async () => {
-        const response = true;
-        expect(response).toBeTruthy();
+        expect(process.env.DB_HOST).toStrictEqual('notlocalhost');
     })
 });
 
-describe('GET /',  () => {
+describe('GET /users',  () => {
     it('should return 200 & valid response if response param list is empty', async done => {
         request(server)
             .get('/users')
             .expect('Content-Type', /json/)
             .expect(200)
             .end((err, res) => {
-                if (err) return done;
-                // Check if html string contains 'hello' or 'welcome'
-                return done()
-            })
+                if (err) return done(err);
+                // Check if object matching
+                expect(res.body).toMatchObject({ message: 'welcome' });
+                done();
+            });
     });
 });

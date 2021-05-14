@@ -14,10 +14,15 @@ import { Router } from 'express';
 
 let router = Router();
 
-router.get('/users', (req, res, next) => {
-    res.json({
-        message: "welcome"
-    });
-});
+router.route('/users')
+    .get(function(req, res, next) { 
+        res.send({ message: 'welcome' });
+    })
+    .post(function(req, res, next) { /** Create User */ });
+
+router.route('/user/:id')
+    .get(function(req, res, next) { /** Get User Details */ })
+    .put(function(req, res, next) { /** Edit User Details */ })
+    .delete(function(req, res, next) { /** Delete User Details */ });
 
 export default router;
