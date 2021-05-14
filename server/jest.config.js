@@ -1,7 +1,7 @@
 module.exports = {
-  preset: 'ts-jest',
+  // preset: 'ts-jest',
   testEnvironment: 'node',
-  moduleNameMapper: {
-    "@exmpl/(.*)": "<rootDir>/src/$1"
-  }
+  modulePathIgnorePatterns: [
+    "<rootDir>/src/" // Skipping test files from src file.
+  ]
 };
