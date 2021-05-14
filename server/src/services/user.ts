@@ -14,8 +14,10 @@ import User, { Gender } from '../models/user';
 // Service Responses
 export type ErrorResponse = { error: { type: string, message: string } };
 export type CreateUserResponse = ErrorResponse | {userId: string};
+export type ReadUserResponse = ErrorResponse | { userId: string, name: string, birth_date: Date, gender: Gender, salary: string };
 
 /**
+ * Service function for creating user.
  * 
  * @param {string} name Name of User
  * @param {Date} birth_date Birth Date of User
@@ -35,14 +37,14 @@ async function createUser(name: string, birth_date: Date, gender: Gender, salary
 
         // Persisting User Data
         user.save()
-            .then(user => {
-                resolve({userId: user._id.toString()});
-            })
+            .then(user => resolve({userId: user._id.toString()}))
             .catch(err => {
-                console.log('[error]')
+                console.log('[error]');
+                reject(err);
             })
     });
 }
+
 
 export default {
     createUser: createUser
