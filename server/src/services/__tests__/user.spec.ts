@@ -55,12 +55,19 @@ describe('updateUser', () => {
         const user: UserDocument | null = await UserModel.findOne().where({ name: 'Bealul Dawit' });
         const newSalary: string = '6000 birr';
 
-        await expect(UserService.updateUser(user?._id, {
-            salary: newSalary
-        }))
-        .resolves
-        .toEqual({ userId: user?._id });
-
+        if (user) {
+            await expect(UserService.updateUser(user?._id, {
+                salary: newSalary
+            }))
+            .resolves
+            .toEqual({
+                userId: user._id,
+                name: user.name,
+                birth_date: user.birth_date,
+                gender: user.gender,
+                salary: newSalary
+            });
+        }
     })
 });
 

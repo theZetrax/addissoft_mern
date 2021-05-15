@@ -12,11 +12,19 @@ import { Router } from 'express';
  * @author Zablon Dawit
  */
 
+import UserService from '../services/user';
+
 let router = Router();
 
 router.route('/users')
     .get(function(req, res, next) { 
-        res.send({ message: 'welcome' });
+        UserService.getUsers()
+            .then(users => {
+                const response = {
+                    users: users
+                };
+                res.send(response);
+            })
     })
     .post(function(req, res, next) { /** Create User */ });
 

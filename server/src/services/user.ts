@@ -11,11 +11,11 @@ import UserModel, { Gender } from '../models/user';
  * 5. Delete User
  */
 
-// Service Responses
+// Service Responses (Type Safety)
 export type ErrorResponse = { error: { type: string, message: string } };
 export type CreateUserResponse = ErrorResponse | {userId: string};
 export type ReadUserResponse = ErrorResponse | { userId: string, name: string, birth_date: Date, gender: Gender, salary: string };
-export type UpdateUserResponse = ErrorResponse | CreateUserResponse;
+export type UpdateUserResponse = ErrorResponse | ReadUserResponse;
 export type ListUserResponse = ErrorResponse | Array<ReadUserResponse>;
 
 /**
@@ -47,20 +47,37 @@ function createUser(name: string, birth_date: Date, gender: Gender, salary: stri
     });
 }
 
+/**
+ * Updates user informarion.
+ * 
+ * @param id User Id.
+ * @param data Updated user information.
+ * @returns {Promise<UpdateUserResponse>} Returns promise that updates the user information.
+ */
 async function updateUser(id: string, data: { name?: string, birth_date?: Date, gender?: Gender, salary?: string }): Promise<UpdateUserResponse> {
     try {
-        let user = await UserModel.findById(id);
+        let user = await UserModel.findById(id); // Retrive User
 
+        // If User exists
         if (user) {
+            // Update user information
             if (data.name) user.name = data.name ;
             if (data.salary) user.salary = data.salary;
             if (data.birth_date) user.birth_date = data.birth_date;
             if (data.gender) user.gender = data.gender;
 
-            await user.save();
+            await user.save(); // Save Changes
 
-            const userResposne: UpdateUserResponse = { userId: user._id };
+            // Filter User Data for response
+            const userResposne: UpdateUserResponse = { 
+                userId: user._id,
+                name: user.name,
+                birth_date: user.birth_date,
+                gender: user.gender,
+                salary: user.salary
+            };
 
+            // Returning user response
             return userResposne;
         }
 

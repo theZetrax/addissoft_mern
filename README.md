@@ -1,6 +1,6 @@
 # UserApp
 
-This is a simple MERN Stack project. This project has a backend api running on ExpressJS, NodeJS framework.
+This is a simple MERN Stack project. This project has a backend api running on ExpressJS, NodeJS framework. Frontend is React using Redux for state management.
 
 # Instructions & Usage
 
