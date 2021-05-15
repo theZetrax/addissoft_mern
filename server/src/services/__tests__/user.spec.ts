@@ -1,5 +1,5 @@
 import db from '../../utils/db';
-import UserModel, { Gender, User, UserDocument } from '../../models/user';
+import UserModel, { Gender, UserDocument } from '../../models/user';
 import UserService from '../../services/user';
 import { seedDB } from '../../tests/db_init';
 
@@ -39,6 +39,42 @@ describe('readUser', () => {
         
         expect(UserService.readUser(user?._id))
             .resolves.toEqual({
+                id: user?._id,
+                name: user?.name,
+                birth_date: user?.birth_date,
+                gender: user?.gender,
+                salary: user?.salary
+            });
+    });
+});
+
+describe('updateUser', () => {
+    it('should resolve with true and return user id', async () => {
+        const user: UserDocument | null = await UserModel.findOne().where({ name: 'Bealul Dawit' });
+        const newSalary: string = '6000 birr';
+
+        expect(UserService.updateUser(user?._id.ToString(), {
+            salary: newSalary
+        }))
+        .resolves
+        .toEqual({
+            id: user?._id,
+            name: user?.name,
+            birth_date: user?.birth_date,
+            gender: user?.gender,
+            salary: newSalary
+        });
+    })
+});
+
+describe('readUsers', () => {
+    it('should resolve with true and return users list', async () => {
+        const user: UserDocument | null = await UserModel.findOne();
+
+        expect(UserService.getUsers())
+            .resolves
+            .toContainEqual({
+                id: user?._id,
                 name: user?.name,
                 birth_date: user?.birth_date,
                 gender: user?.gender,

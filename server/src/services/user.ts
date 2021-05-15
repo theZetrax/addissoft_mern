@@ -1,4 +1,4 @@
-import User, { Gender } from '../models/user';
+import UserModel, { Gender } from '../models/user';
 
 /**
  * Here are functionalities, Services
@@ -15,6 +15,7 @@ import User, { Gender } from '../models/user';
 export type ErrorResponse = { error: { type: string, message: string } };
 export type CreateUserResponse = ErrorResponse | {userId: string};
 export type ReadUserResponse = ErrorResponse | { userId: string, name: string, birth_date: Date, gender: Gender, salary: string };
+export type ListUserResponse = ErrorResponse | Array<ReadUserResponse>;
 
 /**
  * Service function for creating user.
@@ -28,7 +29,7 @@ export type ReadUserResponse = ErrorResponse | { userId: string, name: string, b
 async function createUser(name: string, birth_date: Date, gender: Gender, salary: string): Promise<CreateUserResponse> {
     return new Promise(function(resolve, reject) {
         // Instantiating User Object
-        const user = new User({
+        const user = new UserModel({
             name: name,
             birth_date: birth_date,
             gender: gender,
@@ -45,7 +46,41 @@ async function createUser(name: string, birth_date: Date, gender: Gender, salary
     });
 }
 
+async function getUsers() {
+    return new Promise(async function(resolve, reject) {
+
+        UserModel
+            .find({})
+            .then(users => {
+                console.log(users);
+                // let usersResponse: Array<ReadUserResponse> = new Array<ReadUserResponse>();
+
+                // users.forEach(user => {
+                //     const filteredResponse: ReadUserResponse = {
+                //         userId: user._id,
+                //         name: user.name,
+                //         birth_date: user.birth_date,
+                //         gender: user.gender,
+                //         salary: user.salary
+                //     };
+
+                //     usersResponse.push(filteredResponse);
+                // });
+
+                // resolve(usersResponse);
+            });
+        // Promise
+        //     .resolve(async () => await UserModel.find({}))
+        //     .then(users => console.log(users));
+        
+        // const users = await UserModel.find({});
+        // console.log(users);
+    });
+}
 
 export default {
-    createUser: createUser
+    createUser: createUser,
+    getUsers: getUsers,
+    readUser: () => {},
+    updateUser: () => {}
 };
