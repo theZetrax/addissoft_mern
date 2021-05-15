@@ -37,14 +37,16 @@ describe('readUser', () => {
         expect(user)
             .not.toBeNull();
         
-        expect(UserService.readUser(user?._id))
-            .resolves.toEqual({
-                id: user?._id,
-                name: user?.name,
-                birth_date: user?.birth_date,
-                gender: user?.gender,
-                salary: user?.salary
-            });
+        if (user) {
+            await expect(UserService.readUser(user?._id))
+                .resolves.toEqual({
+                    userId: user?._id,
+                    name: user?.name,
+                    birth_date: user?.birth_date,
+                    gender: user?.gender,
+                    salary: user?.salary
+                });
+        }
     });
 });
 
@@ -53,32 +55,29 @@ describe('updateUser', () => {
         const user: UserDocument | null = await UserModel.findOne().where({ name: 'Bealul Dawit' });
         const newSalary: string = '6000 birr';
 
-        expect(UserService.updateUser(user?._id.ToString(), {
+        await expect(UserService.updateUser(user?._id, {
             salary: newSalary
         }))
         .resolves
-        .toEqual({
-            id: user?._id,
-            name: user?.name,
-            birth_date: user?.birth_date,
-            gender: user?.gender,
-            salary: newSalary
-        });
+        .toEqual({ userId: user?._id });
+
     })
 });
 
-describe('readUsers', () => {
+describe('readUsers [List]', () => {
     it('should resolve with true and return users list', async () => {
         const user: UserDocument | null = await UserModel.findOne();
 
-        expect(UserService.getUsers())
-            .resolves
-            .toContainEqual({
-                id: user?._id,
-                name: user?.name,
-                birth_date: user?.birth_date,
-                gender: user?.gender,
-                salary: user?.salary
-            });
+        if (user) {
+            await expect(UserService.getUsers())
+                .resolves
+                .toContainEqual({
+                    userId: user?._id,
+                    name: user?.name,
+                    birth_date: user?.birth_date,
+                    gender: user?.gender,
+                    salary: user?.salary
+                });
+        }
     });
 });
