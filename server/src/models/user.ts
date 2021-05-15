@@ -1,3 +1,8 @@
+/**
+ * User Model.
+ * 
+ * @author Zablon Dawit
+ */
 import { Document, model, Schema } from 'mongoose';
 
 export enum Gender {
@@ -5,16 +10,16 @@ export enum Gender {
     Female = 0
 }
 
-interface IUserDocument extends Document {
+export interface User {
     name: string;
     birth_date: Date;
     gender: Gender;
     salary: string;
 }
 
-export interface User extends IUserDocument {}
+export interface UserDocument extends Document, User {}
 
-const UserSchema = new Schema<User>({
+const UserSchema = new Schema<UserDocument>({
     name: { type: String, required: true },
     birth_date: { type: Date, default: Date.now },
     gender: {
@@ -26,8 +31,8 @@ const UserSchema = new Schema<User>({
     salary: { type: String, required: true }
 });
 
-UserSchema.methods.getGender = function (this: IUserDocument) {
+UserSchema.methods.getGender = function (this: User) {
     return this.gender > 0 ? "Male" : "Female";
 }
 
-export default model<User>("User", UserSchema);
+export default model<UserDocument>("User", UserSchema);

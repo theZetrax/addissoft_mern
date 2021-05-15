@@ -1,13 +1,12 @@
-import request from 'supertest';
-import { Express } from 'express-serve-static-core';
-
-import { createServer } from '../utils/server';
-
 /**
  * API tests, Tests if routes are functioning.
  * 
  * @author Zablon Dawit
  */
+import request from 'supertest';
+import { Express } from 'express-serve-static-core';
+
+import { createServer } from '../utils/server';
 
 let server: Express;
 
