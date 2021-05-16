@@ -23,8 +23,15 @@ router.route('/users')
                 const response = {
                     users: users
                 };
-                res.send(response);
+                res.setHeader('Content-Type', 'application/json');
+                res.status(200).json(response);
             })
+            .catch((err: any) => {
+                res.setHeader('Content-Type', 'application/json');
+                res.status(500).json(JSON.stringify({
+                    error: { type: 'internal_server_error', message: 'Internal Server Error' }
+                }))
+            });
     })
     .post(function(req, res, next) { /** Create User */ });
 
