@@ -73,7 +73,7 @@ describe('updateUser', () => {
 
 describe('readUsers [List]', () => {
     it('should resolve with true and return users list', async () => {
-        const user: UserDocument | null = await UserModel.findOne();
+        const user: UserDocument | undefined | null = await UserModel.findOne();
 
         if (user) {
             await expect(UserService.getUsers())
@@ -86,5 +86,19 @@ describe('readUsers [List]', () => {
                     salary: user?.salary
                 });
         }
+    });
+});
+
+describe('deleteUser', () => {
+    it('should resolve with true and return user id', async () => {
+        const user = new UserModel();
+        user.name = "Mola Taddesse";
+        user.birth_date = new Date(1998, 4, 3);
+        user.gender = Gender.Male;
+        user.salary = '4000 birr';
+
+        await user.save();
+        await UserService.deleteUser(user._id);
+        expect(user.$isDeleted()).toBeFalsy();
     });
 });

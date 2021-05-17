@@ -17,6 +17,7 @@ export type CreateUserResponse = ErrorResponse | {userId: string};
 export type ReadUserResponse = ErrorResponse | { userId: string, name: string, birth_date: Date, gender: Gender, salary: string };
 export type UpdateUserResponse = ErrorResponse | ReadUserResponse;
 export type ListUserResponse = ErrorResponse | Array<ReadUserResponse>;
+export type DeleteUserResposne = ErrorResponse | CreateUserResponse;
 
 /**
  * Service function for creating user.
@@ -81,9 +82,13 @@ async function updateUser(id: string, data: { name?: string, birth_date?: Date, 
             return userResposne;
         }
 
-        return { error: { type: '[update] user not defined', message: 'user doesn\'t exist' } };
+        return Promise.reject({ error: { type: 'user_not_defined', message: 'user doesn\'t exist' } });
     } catch (err) {
-        return Promise.reject({error: { type: '[update] user doesn\'t exist', message: 'User id doesn\'t exist' }});
+        if (err.kind === 'ObjectId') {
+            return Promise.reject({ error: { type: 'user_not_defined', message: 'user doesn\'t exist' } });
+        }
+
+        return Promise.reject({error: { type: 'updating_failed', message: 'User id doesn\'t exist' }});
     }
 }
 
@@ -103,7 +108,7 @@ async function readUser(id: string): Promise<ReadUserResponse> {
             return filteredUser;
         }
 
-        return { error: { type: '[read] user not defined', message: 'user doesn\'t exist' } };
+        return Promise.reject({ error: { type: '[read] user not defined', message: 'user doesn\'t exist' } });
     } catch (err) {
         return Promise.reject({ error: { type: '[read] user doesn\'t exist', message: 'User id doesn\'t exist' } });
     }
@@ -127,14 +132,27 @@ async function getUsers(): Promise<ListUserResponse> {
         
         return filteredUsers;
     } catch (err) {
-        console.log(err);
-        return { error: { type: "reading user details failed", message: "Error retriving users list" } };
+        return Promise.reject({ error: { type: "reading user details failed", message: "Error retriving users list" } });
+    }
+}
+
+async function deleteUser(id: string): Promise<DeleteUserResposne> {
+    try {
+        await UserModel.findByIdAndDelete(id);
+        return { userId: id };
+    } catch (err) {
+        if (err.kind === 'ObjectId') {
+            return Promise.reject({ error: { type: 'user_not_defined', message: 'user doesn\'t exist' } });
+        }
+
+        return Promise.reject({error: { type: 'removing_failed', message: 'User id doesn\'t exist' }});
     }
 }
 
 export default {
-    createUser: createUser,
-    getUsers: getUsers,
-    updateUser: updateUser,
-    readUser: readUser
+    createUser,
+    getUsers,
+    updateUser,
+    deleteUser,
+    readUser
 };

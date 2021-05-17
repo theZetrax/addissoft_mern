@@ -15,6 +15,8 @@ import userRoutes from '../routes/user';
 export async function createServer(): Promise<Express> {
     const app: Express = express();
 
+    app.use(express.json());
+    
     // Use routes defined in routes file.
     app.use(userRoutes);
 
