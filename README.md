@@ -17,7 +17,7 @@ docker-compose up --build
 
 ## Testing 
 
-For testing the services, the API service and client service follow the steps defined below.
+For testing the services, the API service and client service follow the steps defined below. To use tests your system should have MongoDB installed. After installing MongoDB add the port to the configuration file in `server/config/.env.test`, under the `MONGODB_HOST`.
 
 ### Running API Server Tests
 
