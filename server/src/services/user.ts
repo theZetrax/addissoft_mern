@@ -118,17 +118,13 @@ async function getUsers(): Promise<ListUserResponse> {
     try {
         const users = await UserModel.find({});
 
-        const filteredUsers = users.map(user => {
-            const filtered: ReadUserResponse = {
-                userId: user._id,
-                name: user.name,
-                birth_date: user.birth_date,
-                gender: user.gender,
-                salary: user.salary
-            };
-
-            return filtered;
-        });
+        const filteredUsers = users.map(user => ({
+            userId: user._id,
+            name: user.name,
+            birth_date: user.birth_date,
+            gender: user.gender,
+            salary: user.salary
+        }));
         
         return filteredUsers;
     } catch (err) {

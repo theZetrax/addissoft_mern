@@ -174,7 +174,7 @@ describe('DELETE /users/:id', () => {
 
         request(server)
             .delete(`/users/${user._id}`)
-            .expect(410)
+            .expect(200)
             .expect('Content-Type', /json/)
             .end(async (err, res) => {
                 if (err) return done(err);

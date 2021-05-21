@@ -1,0 +1,3 @@
+# Ingonre linting for these files.
+*.css
+*.svg

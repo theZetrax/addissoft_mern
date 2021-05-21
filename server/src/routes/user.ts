@@ -159,7 +159,7 @@ router.route('/users/:id')
         // Deleting User
         try {
             const response = await UserService.deleteUser(req.params.id);
-            return res.status(410).json(response);
+            return res.status(200).json(response);
         } catch (err) {
             // Response if user id not known
             if (err.error.type === 'user_not_defined') {

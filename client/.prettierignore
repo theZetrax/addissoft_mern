@@ -1,0 +1,3 @@
+# Some Directories that don't need code formatting
+node_modules
+build
