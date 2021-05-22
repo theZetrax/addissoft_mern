@@ -1,4 +1,10 @@
-import { call, put, takeLatest, SagaReturnType } from '@redux-saga/core/effects'
+import {
+    call,
+    put,
+    takeLatest,
+    SagaReturnType,
+    all,
+} from '@redux-saga/core/effects'
 import axios, { AxiosResponse } from 'axios'
 import * as ActionTypes from './reducers/actionTypes'
 
@@ -10,7 +16,8 @@ export function* watcherSaga() {
     yield takeLatest(ActionTypes.FETCH_ALL_USERS_BEGIN, fetchAllUsersSaga)
 }
 
-const fetchAllUsers = async () => await axios.get('http://localhost:8081/users')
+const fetchAllUsers = async (): Promise<AxiosResponse> =>
+    await axios.get('http://localhost:8081/users')
 
 function* fetchAllUsersSaga() {
     try {
@@ -27,4 +34,9 @@ function* fetchAllUsersSaga() {
             payload: { error: err },
         } as Action<UserPayload>)
     }
+}
+
+// eslint-disable-next-line
+export default function* rootSaga() {
+    yield all([watcherSaga()])
 }

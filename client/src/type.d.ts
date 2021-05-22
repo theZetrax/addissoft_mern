@@ -8,7 +8,7 @@ enum Gender {
 interface User {
     userId: string | null
     name: string
-    birth_date: Date
+    birth_date: string
     gender: Gender
     salary: string
 }
@@ -38,9 +38,9 @@ interface Payload<CollectionType, InstanceType> {
 type UserPayload = Payload<UserCollection, User>
 
 // Action Definition
-type Action<T> = {
+type Action<PayloadType> = {
     type: string
-    payload: T
+    payload: PayloadType
 }
 
 // Dispatch Definition

@@ -11,6 +11,7 @@ const reducer = (
     state: UserState = initialState,
     action: Action<UserPayload>
 ): UserState => {
+    console.log('reducer', action, state)
     switch (action.type) {
         // All Users
         case ActionTypes.FETCH_ALL_USERS_BEGIN:

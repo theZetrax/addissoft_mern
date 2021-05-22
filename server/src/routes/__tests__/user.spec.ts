@@ -5,6 +5,8 @@ import db from '../../utils/db';
 import { createServer } from '../../utils/server';
 import { seedDB } from '../../tests/db_init';
 import UserModel, { Gender } from '../../models/user';
+import { ReadUserResponse } from '../../services/user';
+import { toHtmlDateString } from '../../utils/date';
 
 let server: Express;
 
@@ -16,11 +18,11 @@ beforeAll(async () => {
 
 afterAll(async () => {
     await db.close();
-})
+});
 
 // Getting User
 describe('GET /users', () => {
-    it('should return 200 & respond users list of details valid response', async done => {
+    it('should return 200 & respond users list of details valid response', async (done) => {
         request(server)
             .get('/users')
             .expect('Content-Type', /json/)
@@ -30,18 +32,27 @@ describe('GET /users', () => {
                 expect(res.body).toBeInstanceOf(Object);
                 expect(res.body.users).toBeInstanceOf(Array);
 
-                if (res.body.users.Length > 0) {
+                if (res.body.users.length > 0) {
                     const responseUser: any = res.body.users[0];
-                    const databaseUser = await UserModel.findById(responseUser.id);
+                    const databaseUser = await UserModel.findById(
+                        responseUser.userId
+                    );
 
-                    expect(databaseUser).not.toBeInstanceOf(null);
-                    expect(databaseUser).not.toBeInstanceOf(undefined);
+                    expect(databaseUser).not.toBeNull();
+                    expect(databaseUser).not.toBeUndefined();
 
                     if (databaseUser) {
-                        expect(databaseUser.name).toEqual(responseUser.name);
-                        expect(databaseUser.birth_date).toEqual(responseUser.birth_date);
-                        expect(databaseUser.salary).toEqual(responseUser.salary);
-                        expect(databaseUser.gender).toEqual(responseUser.gender);
+                        const responseExpected = {
+                            name: databaseUser.name,
+                            birth_date: toHtmlDateString(
+                                databaseUser.birth_date
+                            ),
+                            salary: databaseUser.salary,
+                            gender: databaseUser.gender > 0 ? 'Female' : 'Male',
+                            userId: databaseUser._id.toString(),
+                        };
+
+                        expect(responseExpected).toEqual(responseUser);
                     }
                 }
 
@@ -53,12 +64,12 @@ describe('GET /users', () => {
 // Creating User
 describe('POST /users', () => {
     // Check if post request creates a user. status 201
-    it('should return 201 status code & return valid response', async done => {
+    it('should return 201 status code & return valid response', async (done) => {
         const data = {
             name: 'Abebe Mola',
             birth_date: '1991-12-12',
             gender: Gender.Male,
-            salary: '3000 birr'
+            salary: '3000 birr',
         };
 
         request(server)
@@ -79,7 +90,7 @@ describe('POST /users', () => {
             });
     });
     // Check if post returns with 400 if parameters not satisfied
-    it('should return 400 status code if parameters are incomplete #1', async done => {
+    it('should return 400 status code if parameters are incomplete #1', async (done) => {
         request(server)
             .post('/users')
             .send({ name: 'Abebe Biqila' })
@@ -91,10 +102,14 @@ describe('POST /users', () => {
             });
     });
 
-    it('should return 400 status code if parameters are incomplete #1', async done => {
+    it('should return 400 status code if parameters are incomplete #1', async (done) => {
         request(server)
             .post('/users')
-            .send({ name: 'Abebe Biqila', birth_date: '1994-04-04', salary: '3000 birr' })
+            .send({
+                name: 'Abebe Biqila',
+                birth_date: '1994-04-04',
+                salary: '3000 birr',
+            })
             .expect(400)
             .expect('Content-Type', /json/)
             .end(async (err, res) => {
@@ -104,10 +119,37 @@ describe('POST /users', () => {
     });
 });
 
+describe('GET /users/:id', () => {
+    it('should return 200 status code and return user information', async (done) => {
+        const user = await UserModel.findOne();
+
+        if (user) {
+            request(server)
+                .get(`/users/${user._id}`)
+                .expect(200)
+                .expect('Content-Type', /json/)
+                .end((err, res) => {
+                    if (err) return done(err);
+                    const resUser: ReadUserResponse = res.body;
+                    const expected = {
+                        userId: user._id.toString(),
+                        name: user.name,
+                        birth_date: toHtmlDateString(user.birth_date),
+                        gender: user.gender > 0 ? 'Female' : 'Male',
+                        salary: user.salary,
+                    };
+
+                    expect(resUser).toEqual(expected);
+                    done();
+                });
+        }
+    });
+});
+
 // Updating User
 describe('PUT /users/:id', () => {
     // Return 201 status code and return valid response
-    it('should return 201 status code and return user information', async done => {
+    it('should return 201 status code and return user information', async (done) => {
         const user = await UserModel.findOne();
 
         if (user) {
@@ -130,7 +172,7 @@ describe('PUT /users/:id', () => {
         }
     });
     // Return 404 if id of user doesn't exist
-    it('should return 404 status code if user doesn\'t exist', async done => {
+    it("should return 404 status code if user doesn't exist", async (done) => {
         const userId = '60a08f93abceffad8b0c';
 
         request(server)
@@ -144,7 +186,7 @@ describe('PUT /users/:id', () => {
             });
     });
     // Return 400 if parameter doesn't satisfy atleast one parameter.
-    it('should return 400 status code if paramenter doesn\'t meet minimum requirement', async done => {
+    it("should return 400 status code if paramenter doesn't meet minimum requirement", async (done) => {
         const user = await UserModel.findOne();
 
         if (user) {
@@ -163,7 +205,7 @@ describe('PUT /users/:id', () => {
 
 // Deleting User
 describe('DELETE /users/:id', () => {
-    it('should return status code 410 and return deleted user id', async done => {
+    it('should return status code 410 and return deleted user id', async (done) => {
         const user = new UserModel();
         user.name = 'Girma Taddesse';
         user.birth_date = new Date(1993, 2, 3);
@@ -182,7 +224,7 @@ describe('DELETE /users/:id', () => {
             });
     });
 
-    it('should return 404 status code if user id does not exist', async done => {
+    it('should return 404 status code if user id does not exist', async (done) => {
         const userId = '60a08f93abceffad8b0c';
 
         request(server)
@@ -194,4 +236,4 @@ describe('DELETE /users/:id', () => {
                 done();
             });
     });
-})
+});
