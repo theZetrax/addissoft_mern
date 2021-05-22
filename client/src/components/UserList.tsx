@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface Props {
-    users: IUser[]
+    users: UserCollection
 }
 
 class UserList extends React.Component<Props> {}

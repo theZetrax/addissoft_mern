@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface Props {
-    user: IUser | null
+    user: User | null
     loading: boolean
     error: string | null
 }
