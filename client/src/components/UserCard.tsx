@@ -23,16 +23,29 @@ class UserCard extends React.Component<Props, State> {
 
         this.handleEdit = this.handleEdit.bind(this)
         this.handleDelete = this.handleDelete.bind(this)
+        this.handleSave = this.handleSave.bind(this)
+        this.handleGenderSelect = this.handleGenderSelect.bind(this)
     }
 
     handleDelete() {
         console.log('deleting')
     }
+
     handleEdit() {
         console.log('editing')
         this.setState({
             editing: !this.state.editing,
         })
+    }
+
+    handleSave() {
+        console.log('handling save')
+        this.setState({
+            editing: !this.state.editing,
+        })
+    }
+    handleGenderSelect() {
+        console.log('handling gender select')
     }
 
     render(): JSX.Element {
@@ -54,6 +67,16 @@ class UserCard extends React.Component<Props, State> {
                             value={user.birth_date}
                             onChange={(e) => console.log(e)}
                         />
+                        <br />
+                        <select
+                            name="gender"
+                            id="gender"
+                            value={user.gender === 'Female' ? '1' : '0'}
+                            onChange={this.handleGenderSelect}>
+                            <option value="">Select Gender</option>
+                            <option value="1">Female</option>
+                            <option value="0">Male</option>
+                        </select>
                     </div>
                 ) : (
                     <div>
@@ -64,11 +87,19 @@ class UserCard extends React.Component<Props, State> {
                     </div>
                 )}
                 <div>
-                    <StyledButton
-                        style={{ margin: '2px 4px' }}
-                        onClick={this.handleEdit}>
-                        Edit
-                    </StyledButton>
+                    {isEditing ? (
+                        <StyledButton
+                            style={{ margin: '2px 4px' }}
+                            onClick={this.handleSave}>
+                            Save
+                        </StyledButton>
+                    ) : (
+                        <StyledButton
+                            style={{ margin: '2px 4px' }}
+                            onClick={this.handleEdit}>
+                            Edit
+                        </StyledButton>
+                    )}
                     <StyledButton onClick={this.handleDelete}>
                         Delete
                     </StyledButton>
@@ -79,8 +110,8 @@ class UserCard extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    loading: state.user.loading,
-    error: state.user.error,
+    loading: state.create.loading,
+    error: state.create.error,
 })
 
 // const mapDispatchToProps = (dispatch: DispatchType) => {}

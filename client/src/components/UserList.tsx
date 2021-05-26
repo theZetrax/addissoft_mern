@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchAllUsersBegin } from '../redux/reducers/actionCreator'
+import { ActionCreators } from '../redux/fetchAllReducer'
 
 import UserCard from './UserCard'
 
@@ -33,14 +33,14 @@ class UserList extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    users: state.user.userCollection,
-    loading: state.user.loading,
-    error: state.user.error,
+    users: state.users.users,
+    loading: state.users.loading,
+    error: state.users.error,
 })
 
 const mapDispatchToProps = (dispatch: DispatchType) => ({
     fetchUsers: (): void => {
-        dispatch(fetchAllUsersBegin())
+        dispatch(ActionCreators.fetchAllBegin())
     },
 })
 

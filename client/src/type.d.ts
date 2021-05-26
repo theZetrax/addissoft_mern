@@ -1,7 +1,7 @@
 // Gender Definition
 enum Gender {
-    Male = 1,
-    Female = 0,
+    Male = 'Male',
+    Female = 'Female',
 }
 
 // User Data Type Definition
@@ -18,21 +18,41 @@ type UserCollection = User[]
 
 // State Definition
 interface RootState {
-    user: UserState
+    users: UserCollectionState
+    create: UserActionState
+    update: UserActionState
+    delete: UserActionState
 }
-interface UserState {
-    userCollection: UserCollection
+interface UserCollectionState {
+    users: UserCollection
     loading: boolean
-    user: User | null
+    error: string | null
+}
+
+interface UserActionState {
+    user?: User | null
+    loading: boolean
     error: string | null
 }
 
 // Payload Definition
 interface Payload<CollectionType, InstanceType> {
     loading: boolean
-    error: string | null
-    collection: CollectionType
-    instance: InstanceType
+    error?: string | null
+    collection?: CollectionType
+    instance?: InstanceType
+}
+
+interface IPayload {
+    error?: string | null
+}
+
+interface UserActionPayload extends IPayload {
+    user?: User | null
+}
+
+interface UserCollectionPayload extends IPayload {
+    users?: UserCollection
 }
 
 type UserPayload = Payload<UserCollection, User>

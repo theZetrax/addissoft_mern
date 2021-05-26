@@ -8,6 +8,8 @@ import {
 import axios, { AxiosResponse } from 'axios'
 import * as ActionTypes from './reducers/actionTypes'
 
+import { FetchAllWatcher } from './fetchAllReducer'
+
 // Response Types
 type apiResponse = SagaReturnType<typeof fetchAllUsers>
 
@@ -38,5 +40,5 @@ function* fetchAllUsersSaga() {
 
 // eslint-disable-next-line
 export default function* rootSaga() {
-    yield all([watcherSaga()])
+    yield all([FetchAllWatcher()])
 }

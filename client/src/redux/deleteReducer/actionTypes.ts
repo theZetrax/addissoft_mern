@@ -1,0 +1,3 @@
+export const DELETE_BEGIN = 'DELETE_BEGIN'
+export const DELETE_SUCCESS = 'DELETE_SUCCESS'
+export const DELETE_ERROR = 'DELETE_ERROR'

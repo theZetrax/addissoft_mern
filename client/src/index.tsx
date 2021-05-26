@@ -9,7 +9,7 @@ import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 
 import rootReducer from './redux/rootReducer'
-import rootSaga from './redux/sagas'
+import rootSaga from './redux/rootSaga'
 
 const sagaMiddleware = createSagaMiddleware() // Saga Middleware
 
