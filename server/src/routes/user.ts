@@ -73,7 +73,9 @@ router
     .post(
         body('name').isString(),
         body('birth_date').isDate(),
-        body('gender').isInt({ min: 0, max: 1 }),
+        body('gender')
+            .isString()
+            .matches(/female|male/i),
         body('salary').isString(),
         async (
             req: express.Request,
@@ -97,7 +99,9 @@ router
             const name = req.body.name;
             const birth_date = new Date(req.body.birth_date); // Convert Date into Date type
             const gender =
-                Number(req.body.gender) > 0 ? Gender.Female : Gender.Male; // Convert Parameter into Gender
+                (req.body.gender as string).toLowerCase() === 'female'
+                    ? Gender.Female
+                    : Gender.Male;
             const salary = req.body.salary;
 
             // Creating User

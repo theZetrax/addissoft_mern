@@ -1,16 +1,16 @@
 import * as ActionTypes from './actionTypes'
 
-export const createUserBegin = (): Action<UserPayload> => ({
+export const createUserBegin = (user: User): Action<UserActionPayload> => ({
     type: ActionTypes.CREATE_USER_BEGIN,
-    payload: { loading: true, error: null },
+    payload: { user },
 })
 
-export const createUserSuccess = (user: User): Action<UserPayload> => ({
+export const createUserSuccess = (): Action<UserActionPayload> => ({
     type: ActionTypes.CREATE_USER_SUCCESS,
-    payload: { loading: false, error: null, instance: user },
+    payload: {},
 })
 
-export const createUserError = (): Action<UserPayload> => ({
+export const createUserError = (error: string): Action<UserActionPayload> => ({
     type: ActionTypes.CREATE_USER_ERROR,
-    payload: { loading: false },
+    payload: { error },
 })

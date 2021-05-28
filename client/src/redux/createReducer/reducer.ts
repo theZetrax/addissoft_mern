@@ -1,36 +1,41 @@
 import * as ActionTypes from './actionTypes'
 
-const initialState: UserActionState = {
+const initialState: CreateUserActionState = {
     user: null,
     error: null,
+    created: false,
     loading: false,
 }
 
 const CreateReducer = (
-    state: UserActionState = initialState,
+    state: CreateUserActionState = initialState,
     action: Action<UserActionPayload>
-): UserActionState => {
+): CreateUserActionState => {
     switch (action.type) {
         case ActionTypes.CREATE_USER_BEGIN:
-            return {
-                ...state,
-                loading: true,
-                error: null,
-            }
-        case ActionTypes.CREATE_USER_SUCCESS:
             if (action.payload.user) {
                 return {
                     ...state,
+                    loading: true,
+                    error: null,
+                    created: false,
                     user: action.payload.user,
-                    loading: false,
                 }
             }
+
             throw new Error('Payload does not contain required user data')
+        case ActionTypes.CREATE_USER_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                created: true,
+            }
         case ActionTypes.CREATE_USER_ERROR:
             if (action.payload.error) {
                 return {
                     ...state,
                     loading: false,
+                    created: false,
                     error: action.payload.error,
                 }
             }

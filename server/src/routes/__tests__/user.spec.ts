@@ -68,7 +68,7 @@ describe('POST /users', () => {
         const data = {
             name: 'Abebe Mola',
             birth_date: '1991-12-12',
-            gender: Gender.Male,
+            gender: 'male',
             salary: '3000 birr',
         };
 

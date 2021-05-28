@@ -7,7 +7,7 @@ import { DeleteReducer } from './deleteReducer'
 const rootReducer = combineReducers({
     users: FetchAllReducer,
     create: CreateReducer,
-    // update
+    // updateuser: User
     delete: DeleteReducer,
 })
 

@@ -2,11 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import {} from '../redux/reducers/actionTypes'
 import { StyledButton } from '../components-styled'
+import { ActionCreator } from '../redux/deleteReducer'
 
 interface Props {
     user: User
     loading: boolean
     error: string | null
+    deleteUser: (user: User) => void
 }
 
 interface State {
@@ -28,6 +30,7 @@ class UserCard extends React.Component<Props, State> {
     }
 
     handleDelete() {
+        this.props.deleteUser(this.props.user)
         console.log('deleting')
     }
 
@@ -114,6 +117,8 @@ const mapStateToProps = (state: RootState) => ({
     error: state.create.error,
 })
 
-// const mapDispatchToProps = (dispatch: DispatchType) => {}
+const mapDispatchToProps = (dispatch: DispatchType) => ({
+    deleteUser: (user: User): void => dispatch(ActionCreator.deleteBegin(user)),
+})
 
-export default connect(mapStateToProps)(UserCard)
+export default connect(mapStateToProps, mapDispatchToProps)(UserCard)

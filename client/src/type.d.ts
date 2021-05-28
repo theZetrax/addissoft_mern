@@ -19,7 +19,7 @@ type UserCollection = User[]
 // State Definition
 interface RootState {
     users: UserCollectionState
-    create: UserActionState
+    create: CreateUserActionState
     update: UserActionState
     delete: UserActionState
 }
@@ -33,6 +33,10 @@ interface UserActionState {
     user?: User | null
     loading: boolean
     error: string | null
+}
+
+interface CreateUserActionState extends UserActionState {
+    created: boolean
 }
 
 // Payload Definition

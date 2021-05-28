@@ -1,7 +1,6 @@
 import * as ActionTypes from './actionTypes'
 
 const initialState: UserActionState = {
-    user: null,
     error: null,
     loading: false,
 }
@@ -17,16 +16,6 @@ const DeleteReducer = (
                 loading: true,
                 error: null,
             }
-        case ActionTypes.DELETE_SUCCESS:
-            if (action.payload.user) {
-                return {
-                    ...state,
-                    user: action.payload.user,
-                    loading: false,
-                }
-            }
-
-            throw new Error('Payload does not contain required user data.')
         case ActionTypes.DELETE_ERROR:
             if (action.payload.error) {
                 return {

@@ -1,8 +1,13 @@
 import React from 'react'
-import UserList from './components/UserList'
+import { UserList, AddUser } from './components'
 
 const App: React.FunctionComponent = () => {
-    return <UserList />
+    return (
+        <>
+            <AddUser />
+            <UserList />
+        </>
+    )
 }
 
 export default App
