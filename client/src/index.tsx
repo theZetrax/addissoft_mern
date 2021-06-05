@@ -11,6 +11,13 @@ import createSagaMiddleware from 'redux-saga'
 import rootReducer from './redux/rootReducer'
 import rootSaga from './redux/rootSaga'
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+// configuring Fontawesome library
+library.add(fab, fas)
+
 const sagaMiddleware = createSagaMiddleware() // Saga Middleware
 
 const composeEnhancer =

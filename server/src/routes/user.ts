@@ -143,7 +143,10 @@ router
             // Validating POST parameters
             body('name').optional().isString(),
             body('birth_date').optional().isString(),
-            body('gender').optional().isInt({ max: 1, min: 0 }),
+            body('gender')
+                .optional()
+                .isString()
+                .matches(/female|male/i),
             body('salary').optional().isString(),
         ],
         async (
@@ -198,7 +201,7 @@ router
             if (name) data.name = name;
             if (birth_date) data.birth_date = new Date(birth_date);
             if (gender)
-                data.gender = Number(gender) > 0 ? Gender.Male : Gender.Female;
+                data.gender = gender === 'female' ? Gender.Female : Gender.Male;
             if (salary) data.salary = salary;
 
             // Update User

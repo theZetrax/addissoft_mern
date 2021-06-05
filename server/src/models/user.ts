@@ -1,13 +1,13 @@
 /**
  * User Model.
- * 
+ *
  * @author Zablon Dawit
  */
 import { Document, model, Schema } from 'mongoose';
 
 export enum Gender {
-    Male = 1,
-    Female = 0
+    Male = 0,
+    Female = 1,
 }
 
 export interface User {
@@ -26,13 +26,13 @@ const UserSchema = new Schema<UserDocument>({
         type: Number,
         enum: [0, 1],
         default: 0,
-        required: true
+        required: true,
     },
-    salary: { type: String, required: true }
+    salary: { type: String, required: true },
 });
 
 UserSchema.methods.getGender = function (this: User) {
-    return this.gender > 0 ? "Male" : "Female";
-}
+    return this.gender > 0 ? 'Male' : 'Female';
+};
 
-export default model<UserDocument>("User", UserSchema);
+export default model<UserDocument>('User', UserSchema);

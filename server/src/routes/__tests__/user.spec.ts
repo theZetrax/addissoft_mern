@@ -120,7 +120,7 @@ describe('POST /users', () => {
 });
 
 describe('GET /users/:id', () => {
-    it('should return 200 status code and return user information', async (done) => {
+    it('should return 201 status code and return user information', async (done) => {
         const user = await UserModel.findOne();
 
         if (user) {
@@ -156,7 +156,7 @@ describe('PUT /users/:id', () => {
             const userId = user._id;
             request(server)
                 .put(`/users/${userId}`)
-                .send({ name: 'NotZablon Dawit' })
+                .send({ name: 'NotZablon Dawit', gender: 'female' })
                 .expect(201)
                 .expect('Content-Type', /json/)
                 .end(async (err, res) => {
@@ -165,6 +165,7 @@ describe('PUT /users/:id', () => {
 
                     if (newUser) {
                         expect(newUser.name).toEqual('NotZablon Dawit');
+                        expect(newUser.gender).toEqual(Gender.Female);
                     }
 
                     done();

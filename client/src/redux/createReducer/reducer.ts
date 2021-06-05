@@ -1,16 +1,16 @@
 import * as ActionTypes from './actionTypes'
 
-const initialState: CreateUserActionState = {
+const initialState: UserActionState = {
     user: null,
     error: null,
-    created: false,
+    success: false,
     loading: false,
 }
 
 const CreateReducer = (
-    state: CreateUserActionState = initialState,
+    state: UserActionState = initialState,
     action: Action<UserActionPayload>
-): CreateUserActionState => {
+): UserActionState => {
     switch (action.type) {
         case ActionTypes.CREATE_USER_BEGIN:
             if (action.payload.user) {
@@ -18,7 +18,7 @@ const CreateReducer = (
                     ...state,
                     loading: true,
                     error: null,
-                    created: false,
+                    success: false,
                     user: action.payload.user,
                 }
             }
@@ -28,14 +28,14 @@ const CreateReducer = (
             return {
                 ...state,
                 loading: false,
-                created: true,
+                success: true,
             }
         case ActionTypes.CREATE_USER_ERROR:
             if (action.payload.error) {
                 return {
                     ...state,
                     loading: false,
-                    created: false,
+                    success: false,
                     error: action.payload.error,
                 }
             }

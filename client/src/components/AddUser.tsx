@@ -2,12 +2,30 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { ActionCreators } from './../redux/createReducer'
 
+import { Form, TextInput, SelectInput, GoButton } from './styled'
+
+// importing fontawesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import styled from 'styled-components'
+
 interface Props {
     created: boolean
     loading: boolean
     error: string | null
     createUser: (user: User) => void
 }
+
+const FlexContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
+
+const GenderIconsContainer = styled.div`
+    display: inline-flex;
+    align-content: center;
+    justify-content: center;
+`
 
 class AddUser extends React.Component<Props> {
     constructor(props: Props) {
@@ -20,7 +38,7 @@ class AddUser extends React.Component<Props> {
     saveChanges(e: React.SyntheticEvent): void {
         e.preventDefault()
         const createForm = e.target as HTMLFormElement
-        
+
         const user: User = {
             name: createForm.username.value,
             birth_date: createForm.birthdate.value,
@@ -47,50 +65,84 @@ class AddUser extends React.Component<Props> {
 
     render(): JSX.Element {
         return (
-            <form onSubmit={this.saveChanges}>
+            <Form onSubmit={this.saveChanges}>
                 <div>
                     <label htmlFor="username">User Full Name</label>
                     <br />
-                    <input type="text" name="username" id="username"  required/>
+                    <FlexContainer>
+                        <FontAwesomeIcon icon="user" />
+                        <TextInput
+                            type="text"
+                            name="username"
+                            id="username"
+                            required
+                        />
+                    </FlexContainer>
                 </div>
                 <div>
                     <label htmlFor="birthdate">User Birth Date</label>
                     <br />
-                    <input type="date" name="birthdate" id="birthdate" required/>
+                    <FlexContainer>
+                        <FontAwesomeIcon icon="calendar-alt" />
+                        <TextInput
+                            type="date"
+                            name="birthdate"
+                            id="birthdate"
+                            required
+                        />
+                    </FlexContainer>
                 </div>
                 <div>
                     <label htmlFor="gender">User Gender</label>
                     <br />
-                    <select name="gender" id="gender" required>
-                        <option value="">Select Gender</option>
-                        <option value="female">Female</option>
-                        <option value="male">Male</option>
-                    </select>
+                    <FlexContainer>
+                        <GenderIconsContainer>
+                            <FontAwesomeIcon icon="male" />
+                            <span style={{ margin: '0 4px' }}>|</span>
+                            <FontAwesomeIcon icon="female" />
+                        </GenderIconsContainer>
+                        <SelectInput name="gender" id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </SelectInput>
+                    </FlexContainer>
                 </div>
                 <div>
                     <label htmlFor="salary">User Salary</label>
                     <br />
-                    <input
-                        type="number"
-                        name="salary"
-                        id="salary"
-                        min="0"
-                        step="100"
-                        required
-                    />
+                    <FlexContainer>
+                        <FontAwesomeIcon icon="money-bill" />
+                        <TextInput
+                            type="number"
+                            name="salary"
+                            id="salary"
+                            min="0"
+                            step="100"
+                            required
+                        />
+                    </FlexContainer>
                 </div>
-                <div>
-                    <button type="submit">Create</button>
-                    <button onClick={this.clearForm}>Cancel</button>
-                </div>
-            </form>
+                <FlexContainer>
+                    <GoButton type="submit">
+                        <FontAwesomeIcon icon="plus-circle" /> Create
+                    </GoButton>
+                    <GoButton onClick={this.clearForm}>
+                        <FontAwesomeIcon
+                            icon="exclamation-circle"
+                            style={{ paddingRight: '3px' }}
+                        />
+                        Cancel
+                    </GoButton>
+                </FlexContainer>
+            </Form>
         )
     }
 }
 
 const mapStateToProps = (state: RootState) => ({
     loading: state.create.loading,
-    created: state.create.created,
+    created: state.create.success,
     error: state.create.error,
 })
 

@@ -1,38 +1,38 @@
 import * as ActionTypes from './actionTypes'
 
 const initialState: UserActionState = {
-    error: null,
+    user: null,
     loading: false,
-    success: true,
+    success: false,
+    error: null,
 }
 
-const DeleteReducer = (
+const UpdateReducer = (
     state: UserActionState = initialState,
     action: Action<UserActionPayload>
 ): UserActionState => {
     switch (action.type) {
-        case ActionTypes.DELETE_BEGIN:
+        case ActionTypes.UPDATE_BEGIN:
             return {
                 ...state,
                 loading: true,
                 error: null,
                 success: false,
-            }
-        case ActionTypes.DELETE_SUCCESS:
+            } as UserActionState
+        case ActionTypes.UPDATE_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                error: null,
                 success: true,
-            }
-        case ActionTypes.DELETE_ERROR:
+            } as UserActionState
+        case ActionTypes.UPDATE_FAIL:
             if (action.payload.error) {
                 return {
                     ...state,
                     loading: false,
-                    error: action.payload.error,
                     success: false,
-                }
+                    error: action.payload.error,
+                } as UserActionState
             }
 
             throw new Error('Payload does not contain required error data.')
@@ -41,4 +41,4 @@ const DeleteReducer = (
     }
 }
 
-export default DeleteReducer
+export default UpdateReducer

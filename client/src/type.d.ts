@@ -33,10 +33,7 @@ interface UserActionState {
     user?: User | null
     loading: boolean
     error: string | null
-}
-
-interface CreateUserActionState extends UserActionState {
-    created: boolean
+    success: boolean
 }
 
 // Payload Definition

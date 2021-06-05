@@ -1,19 +1,28 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {} from '../redux/reducers/actionTypes'
-import { StyledButton } from '../components-styled'
-import { ActionCreator } from '../redux/deleteReducer'
+import styled from 'styled-components'
+
+// Custom library
+import * as deleteReducer from '../redux/deleteReducer'
+import * as updateReducer from '../redux/updateReducer'
+import { GoButton, TextInput, SelectInput } from './styled'
 
 interface Props {
     user: User
     loading: boolean
     error: string | null
+    updateState: UserActionState
     deleteUser: (user: User) => void
+    updateUser: (user: User) => void
 }
 
 interface State {
     editing: boolean
 }
+
+const CardDiv = styled.div`
+    width: 300px;
+`
 
 class UserCard extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -35,14 +44,27 @@ class UserCard extends React.Component<Props, State> {
     }
 
     handleEdit() {
-        console.log('editing')
         this.setState({
             editing: !this.state.editing,
         })
     }
 
-    handleSave() {
-        console.log('handling save')
+    handleSave(e: React.SyntheticEvent) {
+        e.preventDefault()
+
+        const editForm = e.target as HTMLFormElement
+        const updateUserData = {
+            userId: (editForm['user-id'] as unknown as HTMLInputElement).value,
+            name: (editForm.name as unknown as HTMLInputElement).value,
+            birth_date: (editForm['birth-date'] as unknown as HTMLDataElement)
+                .value,
+            gender: (editForm.gender as unknown as HTMLSelectElement).value,
+            salary: (editForm.salary as unknown as HTMLInputElement).value,
+        } as User
+
+        console.log('handleSave', updateUserData)
+        this.props.updateUser(updateUserData)
+
         this.setState({
             editing: !this.state.editing,
         })
@@ -56,58 +78,65 @@ class UserCard extends React.Component<Props, State> {
         const isEditing = this.state.editing
 
         return (
-            <div>
+            <CardDiv>
                 {isEditing ? (
-                    <div>
+                    <form onSubmit={this.handleSave}>
+                        <h4>Editing User: {user.name}</h4>
                         <input
+                            type="hidden"
+                            name="user-id"
+                            id="user-id"
+                            value={user.userId as unknown as string}
+                        />
+                        <TextInput
                             type="text"
-                            value={user.name}
-                            onChange={(e) => console.log('Change')}
+                            name="name"
+                            id="name"
+                            defaultValue={user.name}
+                            onChange={() => console.log('Change')}
                         />
                         <br />
-                        <input
+                        <TextInput
                             type="date"
-                            value={user.birth_date}
+                            name="birth-date"
+                            id="birth-date"
+                            defaultValue={user.birth_date}
                             onChange={(e) => console.log(e)}
                         />
                         <br />
-                        <select
+                        <SelectInput
                             name="gender"
                             id="gender"
-                            value={user.gender === 'Female' ? '1' : '0'}
+                            defaultValue={user.gender.toLowerCase()}
                             onChange={this.handleGenderSelect}>
                             <option value="">Select Gender</option>
-                            <option value="1">Female</option>
-                            <option value="0">Male</option>
-                        </select>
-                    </div>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                        </SelectInput>
+                        <br />
+                        <TextInput defaultValue={user.salary} name="salary" />
+                        <div>
+                            <GoButton type="submit">Save</GoButton>
+                            <GoButton onClick={this.handleDelete}>
+                                Delete
+                            </GoButton>
+                        </div>
+                    </form>
                 ) : (
                     <div>
                         <h4>{user.name}</h4>
                         <p>{user.birth_date}</p>
                         <p>{user.gender}</p>
                         <p>{user.salary}</p>
+                        <div>
+                            <GoButton onClick={this.handleEdit}>Edit</GoButton>
+                            <GoButton onClick={this.handleDelete}>
+                                Delete
+                            </GoButton>
+                        </div>
                     </div>
                 )}
-                <div>
-                    {isEditing ? (
-                        <StyledButton
-                            style={{ margin: '2px 4px' }}
-                            onClick={this.handleSave}>
-                            Save
-                        </StyledButton>
-                    ) : (
-                        <StyledButton
-                            style={{ margin: '2px 4px' }}
-                            onClick={this.handleEdit}>
-                            Edit
-                        </StyledButton>
-                    )}
-                    <StyledButton onClick={this.handleDelete}>
-                        Delete
-                    </StyledButton>
-                </div>
-            </div>
+            </CardDiv>
         )
     }
 }
@@ -115,10 +144,14 @@ class UserCard extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState) => ({
     loading: state.create.loading,
     error: state.create.error,
+    updateState: state.update,
 })
 
 const mapDispatchToProps = (dispatch: DispatchType) => ({
-    deleteUser: (user: User): void => dispatch(ActionCreator.deleteBegin(user)),
+    deleteUser: (user: User): void =>
+        dispatch(deleteReducer.ActionCreator.deleteBegin(user)),
+    updateUser: (user: User): void =>
+        dispatch(updateReducer.ActionCreator.updateBegin(user)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserCard)

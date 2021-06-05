@@ -5,6 +5,11 @@ export const deleteBegin = (user: User): Action<UserActionPayload> => ({
     payload: { user },
 })
 
+export const deleteSuccess = (): Action<UserActionPayload> => ({
+    type: ActionTypes.DELETE_SUCCESS,
+    payload: {},
+})
+
 export const deleteError = (error: string): Action<UserActionPayload> => ({
     type: ActionTypes.DELETE_ERROR,
     payload: { error },

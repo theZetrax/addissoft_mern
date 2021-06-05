@@ -3,11 +3,12 @@ import { combineReducers } from 'redux'
 import { CreateReducer } from './createReducer'
 import { FetchAllReducer } from './fetchAllReducer'
 import { DeleteReducer } from './deleteReducer'
+import { UpdateReducer } from './updateReducer'
 
 const rootReducer = combineReducers({
     users: FetchAllReducer,
     create: CreateReducer,
-    // updateuser: User
+    update: UpdateReducer,
     delete: DeleteReducer,
 })
 
